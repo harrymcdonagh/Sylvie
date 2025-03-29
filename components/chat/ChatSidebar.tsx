@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
 import { LogOut, MessageSquare, Plus, Settings, User, Cat } from "lucide-react";
+import { ModeToggle } from "../ui/mode-toggle";
 
 const conversations = [
   { id: 1, title: "Welcome Chat", date: new Date(2023, 5, 15), unread: false },
@@ -48,16 +49,18 @@ export function ChatSidebar() {
   return (
     <Sidebar>
       <SidebarHeader className="pb-2">
-        <div className="flex items-center gap-2 px-4 py-3">
-          <div className="relative">
-            <Cat className="text-orange-400 w-10 h-10" />
+        <div className="flex items-center justify-between px-4 py-3">
+          <div className="flex items-center gap-2">
+            <div className="relative">
+              <Cat className="text-orange-400 w-10 h-10" />
+            </div>
+            <div>
+              <h1 className="text-2xl font-bold tracking-tight">Sylvie</h1>
+              <p className="text-xs text-muted-foreground">UEA AI Assistant</p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-2xl font-bold tracking-tight">Sylvie</h1>
-            <p className="text-xs text-muted-foreground">UEA AI Assistant</p>
-          </div>
+          <ModeToggle />
         </div>
-
         <div className="px-3 pt-2">
           <Button
             className="w-full gap-2 bg-orange-500 hover:bg-orange-600 text-white"
@@ -105,7 +108,6 @@ export function ChatSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-
       <SidebarFooter>
         <SidebarSeparator />
         <SidebarGroup>

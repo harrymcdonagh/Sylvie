@@ -17,14 +17,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { LogOut, MessageSquare, Plus, Settings, User, Cat } from "lucide-react";
 
-// Sample conversations with dates
 const conversations = [
   { id: 1, title: "Welcome Chat", date: new Date(2023, 5, 15), unread: false },
   { id: 2, title: "Timetable Help", date: new Date(2023, 5, 18), unread: true },
   { id: 3, title: "Wellbeing Advice", date: new Date(2023, 5, 10), unread: false },
 ];
 
-// Sort conversations by date (newest first)
 const sortedConversations = [...conversations].sort(
   (a, b) => b.date.getTime() - a.date.getTime()
 );

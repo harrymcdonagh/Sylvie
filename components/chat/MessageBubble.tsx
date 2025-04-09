@@ -23,7 +23,7 @@ const MessageBubble = ({ message, user }: MessageBubbleProps) => {
           className={`p-3 rounded-lg ${
             isUserMessage
               ? "bg-primary text-primary-foreground rounded-br-none"
-              : "bg-muted text-muted-foreground rounded-bl-none border border-border"
+              : "bg-primary text-primary-foreground rounded-bl-none border border-border"
           }`}
         >
           {message.content}

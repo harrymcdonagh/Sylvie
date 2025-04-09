@@ -3,6 +3,7 @@
 import React from "react";
 import { Reveal } from "@/components/utils/Reveal";
 import { OutlineButton } from "@/components/buttons/OutlineButton";
+import Link from "next/link";
 
 const Hero = () => {
   return (
@@ -31,9 +32,11 @@ const Hero = () => {
             </h2>
           </Reveal>
           <Reveal>
-            <OutlineButton className="pointer-events-auto before:bg-orange-700 hover:text-white hover:border-orange-700 bg-orange-500 text-zinc-100 border-orange-500 md:mt-3">
-              Let&apos;s Chat
-            </OutlineButton>
+            <Link href="/chat">
+              <OutlineButton className="pointer-events-auto before:bg-orange-700 hover:text-white hover:border-orange-700 bg-orange-500 text-zinc-100 border-orange-500 md:mt-3">
+                Let&apos;s Chat
+              </OutlineButton>
+            </Link>
           </Reveal>
         </div>
       </div>

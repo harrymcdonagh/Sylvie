@@ -6,13 +6,14 @@ if (!MONGODB_URI) {
   throw new Error("Please define the MONGODB_URI environment variable");
 }
 
-export const connectDB = async () => {
-  try {
-    if (mongoose.connection.readyState >= 1) return;
-    await mongoose.connect(MONGODB_URI);
-    console.log("MongoDB Connected");
-  } catch (error) {
-    console.error("MongoDB Connection Error:", error);
-    process.exit(1);
+async function connectDb() {
+  if (mongoose.connection.readyState === 1) {
+    return mongoose;
   }
-};
+  const opts = {
+    bufferCommands: false,
+  };
+  await mongoose.connect(MONGODB_URI!, opts);
+  return mongoose;
+}
+export default connectDb;

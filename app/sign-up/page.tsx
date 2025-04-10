@@ -18,6 +18,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { TriangleAlert } from "lucide-react";
+import { signIn } from "next-auth/react";
 
 const SignUp = () => {
   const [form, setForm] = useState({
@@ -54,6 +55,14 @@ const SignUp = () => {
       setPending(false);
       setError(data.message);
     }
+  };
+
+  const handleProvider = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    value: "github" | "google"
+  ) => {
+    event.preventDefault();
+    signIn(value, { callbackUrl: "/" });
   };
 
   return (
@@ -117,10 +126,20 @@ const SignUp = () => {
           </div>
 
           <div className="flex justify-center gap-4">
-            <Button disabled={false} onClick={() => {}} variant="outline" size="lg">
+            <Button
+              disabled={false}
+              onClick={(e) => handleProvider(e, "google")}
+              variant="outline"
+              size="lg"
+            >
               <FcGoogle className="text-xl" />
             </Button>
-            <Button disabled={false} onClick={() => {}} variant="outline" size="lg">
+            <Button
+              disabled={false}
+              onClick={(e) => handleProvider(e, "github")}
+              variant="outline"
+              size="lg"
+            >
               <FaGithub className="text-xl" />
             </Button>
           </div>

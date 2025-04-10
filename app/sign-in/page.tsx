@@ -1,7 +1,10 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { useSearchParams, useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
+import { TriangleAlert } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -14,26 +17,42 @@ import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
-import { useState } from "react";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import { signIn } from "next-auth/react";
-import { TriangleAlert } from "lucide-react";
 
 const SignIn = () => {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
+
   const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // 👇 Check for OAuth or credential errors from query
+  useEffect(() => {
+    const errorParam = searchParams.get("error");
+    if (errorParam) {
+      const errorMessages: Record<string, string> = {
+        EmailAlreadyExists: "This email is already associated with another account.",
+        OAuthError: "Something went wrong during GitHub sign-in.",
+        CredentialsSignin: "Invalid email or password.",
+        default: "Something went wrong. Please try again.",
+      };
+      setError(errorMessages[errorParam] || errorMessages.default);
+    }
+  }, [searchParams]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setPending(true);
+    setError("");
+
     const res = await signIn("credentials", {
       redirect: false,
       email,
       password,
     });
+
     if (res?.ok) {
       router.push("/");
       toast.success("Sign in successful", { duration: 4000 });
@@ -46,6 +65,14 @@ const SignIn = () => {
     }
   };
 
+  const handleProvider = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    provider: "github" | "google"
+  ) => {
+    event.preventDefault();
+    signIn(provider, { callbackUrl: "/" });
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-4">
       <Card className="w-full max-w-md p-4 sm:p-8">
@@ -55,12 +82,14 @@ const SignIn = () => {
             Use email or services to sign in
           </CardDescription>
         </CardHeader>
+
         {!!error && (
-          <div className="bg-destructive/15 p-3 rounded-md flex items-center gap-x-2 test-sm text-destructive">
-            <TriangleAlert />
+          <div className="bg-destructive/15 p-3 rounded-md flex items-center gap-x-2 text-sm text-destructive">
+            <TriangleAlert className="h-5 w-5" />
             <p>{error}</p>
           </div>
         )}
+
         <CardContent className="px-2 sm:px-6 space-y-6">
           <form onSubmit={handleSubmit} className="space-y-3">
             <Input
@@ -91,16 +120,26 @@ const SignIn = () => {
           </div>
 
           <div className="flex justify-center gap-4">
-            <Button disabled={pending} onClick={() => {}} variant="outline" size="lg">
+            <Button
+              disabled={pending}
+              onClick={(e) => handleProvider(e, "google")}
+              variant="outline"
+              size="lg"
+            >
               <FcGoogle className="text-xl" />
             </Button>
-            <Button disabled={pending} onClick={() => {}} variant="outline" size="lg">
+            <Button
+              disabled={pending}
+              onClick={(e) => handleProvider(e, "github")}
+              variant="outline"
+              size="lg"
+            >
               <FaGithub className="text-xl" />
             </Button>
           </div>
 
           <p className="text-center text-sm mt-2 text-muted-foreground">
-            Don't have an account?
+            Don’t have an account?
             <Link
               href="/sign-up"
               className="text-orange-500 ml-2 hover:underline cursor-pointer"

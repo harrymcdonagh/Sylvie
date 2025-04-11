@@ -1,6 +1,6 @@
 import type { Message, User } from "@/lib/types";
 import { Cat } from "lucide-react";
-import { Avatar } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 interface MessageBubbleProps {
   message: Message;
@@ -9,6 +9,7 @@ interface MessageBubbleProps {
 
 const MessageBubble = ({ message, user }: MessageBubbleProps) => {
   const isUserMessage = message.sender === "user";
+  const avatarFallback = user.name?.charAt(0).toUpperCase();
 
   return (
     <div className={`flex ${isUserMessage ? "justify-end" : "justify-start"} mb-2`}>
@@ -29,7 +30,16 @@ const MessageBubble = ({ message, user }: MessageBubbleProps) => {
           {message.content}
         </div>
       </div>
-      {isUserMessage && <Avatar className="text-orange-400 w-8 h-8" />}
+      {isUserMessage && (
+        <div className="w-8 h-8 rounded-full bg-background flex items-center justify-center ml-2 self-end">
+          <Avatar className="w-8 h-8">
+            <AvatarImage src={user.avatar} alt={user.name || "User avatar"} />
+            <AvatarFallback className="bg-primary text-primary-foreground text-sm">
+              {avatarFallback}
+            </AvatarFallback>
+          </Avatar>
+        </div>
+      )}
     </div>
   );
 };

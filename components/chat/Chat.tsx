@@ -5,24 +5,24 @@ import ChatTitle from "./ChatTitle";
 import ChatWindow from "./ChatWindow";
 import ChatInput from "./ChatInput";
 import type { Message, User } from "@/lib/types";
+import { useSession } from "next-auth/react";
 
 export const Chat = () => {
+  const { data: session } = useSession();
   const [messages, setMessages] = useState<Message[]>([]);
   const [conversationId, setConversationId] = useState<string>("");
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const currentUser: User = {
-    id: "user-1", // Replace with the authenticated user's id
-    name: "You",
-    avatar: "/placeholder.svg?height=40&width=40",
+    id: session?.user.id || "",
+    name: session?.user.name || "User",
+    avatar: session?.user.image || "",
   };
 
   const assistant: User = {
-    id: "assistant-1",
+    id: "assistant",
     name: "Sylvie",
-    avatar: "/placeholder.svg?height=40&width=40",
-    isOnline: true,
   };
 
   // Load or create conversation on mount.

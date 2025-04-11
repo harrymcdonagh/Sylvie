@@ -1,8 +1,7 @@
 export interface User {
   id: string;
   name: string;
-  avatar: string;
-  isOnline?: boolean;
+  avatar?: string;
 }
 
 export interface Message {

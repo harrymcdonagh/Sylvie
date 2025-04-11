@@ -57,13 +57,13 @@ const SignUp = () => {
     }
   };
 
-  const handleProvider = (
+  /*   const handleProvider = (
     event: React.MouseEvent<HTMLButtonElement>,
     value: "github" | "google"
   ) => {
     event.preventDefault();
     signIn(value, { callbackUrl: "/" });
-  };
+  }; */
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-4">
@@ -119,7 +119,7 @@ const SignUp = () => {
             </Button>
           </form>
 
-          <div className="flex items-center gap-4">
+          {/* <div className="flex items-center gap-4">
             <Separator className="flex-1" />
             <span className="text-xs text-muted-foreground">or</span>
             <Separator className="flex-1" />
@@ -142,7 +142,7 @@ const SignUp = () => {
             >
               <FaGithub className="text-xl" />
             </Button>
-          </div>
+          </div> */}
 
           <p className="text-center text-sm mt-2 text-muted-foreground">
             Already have an account?

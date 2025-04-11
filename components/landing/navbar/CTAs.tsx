@@ -7,7 +7,6 @@ import UserDropdown from "./UserDropdown";
 const CTAs = () => {
   const router = useRouter();
   const { data: session } = useSession();
-
   const handleSignOut = async () => {
     await signOut({ redirect: false });
     router.push("/");
@@ -30,7 +29,7 @@ const CTAs = () => {
               <span>Sign in</span>
             </button>
           </Link>
-          <Link href="/register">
+          <Link href="/sign-up">
             <button className="rounded-lg border-2 border-orange-400 bg-orange-400 px-4 py-2 font-semibold text-black transition-colors hover:border-orange-600 hover:bg-orange-600 hover:text-white">
               Register
             </button>

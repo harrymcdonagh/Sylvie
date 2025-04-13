@@ -1,17 +1,21 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import ChatTitle from "./ChatTitle";
 import ChatWindow from "./ChatWindow";
 import ChatInput from "./ChatInput";
 import type { Message, User } from "@/lib/types";
 import { useSession } from "next-auth/react";
+import { useChatContext } from "./ChatProvider";
+
+const assistant: User = {
+  id: "assistant",
+  name: "Sylvie",
+};
 
 export const Chat = () => {
   const { data: session } = useSession();
-  console.log(session?.user.id);
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [conversationId, setConversationId] = useState<string>("");
+  const { activeConversation, messages, setMessages } = useChatContext();
   const [isTyping, setIsTyping] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -21,44 +25,15 @@ export const Chat = () => {
     avatar: session?.user.image || "",
   };
 
-  const assistant: User = {
-    id: "assistant",
-    name: "Sylvie",
-  };
-
-  useEffect(() => {
-    if (!currentUser.id) return;
-    const fetchConversation = async () => {
-      const res = await fetch(`/api/conversations?userId=${currentUser.id}`);
-      if (res.ok) {
-        const conv = await res.json();
-        setConversationId(conv._id);
-      }
-    };
-    fetchConversation();
-  }, [currentUser.id]);
-
-  useEffect(() => {
-    if (!conversationId) return;
-    const fetchMessages = async () => {
-      const res = await fetch(`/api/messages?conversationId=${conversationId}`);
-      if (res.ok) {
-        const data = await res.json();
-        setMessages(data);
-      }
-    };
-    fetchMessages();
-  }, [conversationId]);
-
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isTyping]);
 
   const sendMessage = async (content: string) => {
-    if (!content.trim() || !conversationId) return;
+    if (!content.trim() || !activeConversation) return;
 
     const userMessage: Message = {
-      id: Date.now().toString(),
+      _id: Date.now().toString(),
       content,
       sender: "user",
       timestamp: new Date().toISOString(),
@@ -69,7 +44,7 @@ export const Chat = () => {
 
     await fetch("/api/messages", {
       method: "POST",
-      body: JSON.stringify({ ...userMessage, conversationId }),
+      body: JSON.stringify({ ...userMessage, conversationId: activeConversation }),
     });
 
     setIsTyping(true);
@@ -85,10 +60,10 @@ export const Chat = () => {
 
       setMessages((prev) => [...prev, assistantMessage]);
 
-      // Save assistant message with conversationId
+      // Save assistant message with conversationId.
       await fetch("/api/messages", {
         method: "POST",
-        body: JSON.stringify({ ...assistantMessage, conversationId }),
+        body: JSON.stringify({ ...assistantMessage, conversationId: activeConversation }),
       });
 
       setIsTyping(false);

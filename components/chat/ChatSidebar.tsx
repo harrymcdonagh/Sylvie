@@ -19,15 +19,14 @@ import { LogOut, MessageSquare, Plus, Settings, User, Cat } from "lucide-react";
 import { ModeToggle } from "../ui/mode-toggle";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { Conversation } from "@/lib/types";
+import { useChatContext } from "./ChatProvider";
+import type { Conversation } from "@/lib/types";
 
 export function ChatSidebar() {
   const { data: session } = useSession();
-
+  const { activeConversation, setActiveConversation } = useChatContext();
   const [conversations, setConversations] = useState<Conversation[]>([]);
-  const [activeConversation, setActiveConversation] = useState<string | null>(null);
 
-  // Fetch recent conversations once the session is available
   useEffect(() => {
     if (!session?.user?.id) return;
 
@@ -40,8 +39,8 @@ export function ChatSidebar() {
         const data = await res.json();
         setConversations(data);
 
-        // Set the first conversation (most recent) as active, if available.
-        if (data.length > 0) {
+        // If no active conversation is set, choose the first one.
+        if (data.length > 0 && !activeConversation) {
           setActiveConversation(data[0]._id);
         }
       } catch (error) {
@@ -50,9 +49,8 @@ export function ChatSidebar() {
     };
 
     fetchConversations();
-  }, [session]);
+  }, [session, activeConversation, setActiveConversation]);
 
-  // Format date to relative time (Today, Yesterday, or a formatted date)
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const today = new Date();

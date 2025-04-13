@@ -1,4 +1,5 @@
 import { Chat } from "@/components/chat/Chat";
+import { ChatProvider } from "@/components/chat/ChatProvider";
 
 export default function Dashboard() {
   return (

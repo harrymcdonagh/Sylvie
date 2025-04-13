@@ -16,7 +16,7 @@ const ChatWindow = ({ messages, currentUser, assistant, isTyping }: ChatWindowPr
       <div className="space-y-4">
         {messages.map((message) => (
           <MessageBubble
-            key={message.id}
+            key={message._id}
             message={message}
             user={message.sender === "user" ? currentUser : assistant}
           />

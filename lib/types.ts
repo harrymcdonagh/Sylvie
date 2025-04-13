@@ -5,7 +5,7 @@ export interface User {
 }
 
 export interface Message {
-  id: string;
+  _id: string;
   content: string;
   sender: "user" | "assistant";
   timestamp: string;

@@ -9,6 +9,7 @@ import { useSession } from "next-auth/react";
 
 export const Chat = () => {
   const { data: session } = useSession();
+  console.log(session?.user.id);
   const [messages, setMessages] = useState<Message[]>([]);
   const [conversationId, setConversationId] = useState<string>("");
   const [isTyping, setIsTyping] = useState(false);
@@ -25,8 +26,8 @@ export const Chat = () => {
     name: "Sylvie",
   };
 
-  // Load or create conversation on mount.
   useEffect(() => {
+    if (!currentUser.id) return;
     const fetchConversation = async () => {
       const res = await fetch(`/api/conversations?userId=${currentUser.id}`);
       if (res.ok) {
@@ -35,9 +36,8 @@ export const Chat = () => {
       }
     };
     fetchConversation();
-  }, []);
+  }, [currentUser.id]);
 
-  // Load messages when conversationId is available.
   useEffect(() => {
     if (!conversationId) return;
     const fetchMessages = async () => {
@@ -50,7 +50,6 @@ export const Chat = () => {
     fetchMessages();
   }, [conversationId]);
 
-  // Scroll to bottom when messages change.
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isTyping]);
@@ -68,7 +67,6 @@ export const Chat = () => {
 
     setMessages((prev) => [...prev, userMessage]);
 
-    // Save user message with conversationId
     await fetch("/api/messages", {
       method: "POST",
       body: JSON.stringify({ ...userMessage, conversationId }),
@@ -76,7 +74,6 @@ export const Chat = () => {
 
     setIsTyping(true);
 
-    // Simulate assistant response
     setTimeout(async () => {
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),

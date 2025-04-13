@@ -11,3 +11,10 @@ export interface Message {
   timestamp: string;
   status: "sent" | "delivered" | "read";
 }
+
+export interface Conversation {
+  _id: string;
+  title: string;
+  createdAt: string;
+  unread?: boolean;
+}

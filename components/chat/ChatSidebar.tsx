@@ -15,7 +15,7 @@ import {
   SidebarSeparator,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
-import { LogOut, MessageSquare, Plus, Settings, User, Cat } from "lucide-react";
+import { LogOut, MessageSquare, Plus, Settings, User, Cat, Trash } from "lucide-react";
 import { ModeToggle } from "../ui/mode-toggle";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
@@ -67,12 +67,34 @@ export function ChatSidebar() {
 
       const newConversation = await res.json();
 
-      // Prepend the new conversation to the conversations list
       setConversations((prev) => [newConversation, ...prev]);
-      // Set the newly created conversation as active.
       setActiveConversation(newConversation._id);
     } catch (error) {
       console.error("Error creating new chat:", error);
+    }
+  };
+
+  const handleDeleteConversation = async (conversationId: string) => {
+    if (!session?.user?.id) return;
+    console.log("Deleting conversation:", conversationId);
+
+    try {
+      const res = await fetch(
+        `/api/conversations/remove?conversationId=${conversationId}`,
+        {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userId: session.user.id }),
+        }
+      );
+
+      if (!res.ok) {
+        throw new Error("Failed to delete conversation");
+      }
+
+      setConversations((prev) => prev.filter((conv) => conv._id !== conversationId));
+    } catch (error) {
+      console.error("Error deleting chat:", error);
     }
   };
 
@@ -137,17 +159,25 @@ export function ChatSidebar() {
                     isActive={activeConversation === conversation._id}
                     onClick={() => setActiveConversation(conversation._id)}
                   >
-                    <a href="#" className="flex items-center gap-2 relative">
-                      <MessageSquare size={16} />
-                      <div className="flex flex-col">
-                        <span>{conversation.title}</span>
-                        <span className="text-xs text-muted-foreground">
-                          {formatDate(conversation.createdAt)}
-                        </span>
+                    <a href="#" className="flex items-center justify-between w-full">
+                      <div className="flex items-center gap-2">
+                        <MessageSquare size={16} />
+                        <div className="flex flex-col">
+                          <span>{conversation.title}</span>
+                          <span className="text-xs text-muted-foreground">
+                            {formatDate(conversation.createdAt)}
+                          </span>
+                        </div>
                       </div>
-                      {conversation.unread && (
-                        <span className="absolute right-2 top-1/2 -translate-y-1/2 h-2 w-2 rounded-full bg-orange-500"></span>
-                      )}
+                      <Trash
+                        size={16}
+                        className="cursor-pointer hover:text-red-500"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleDeleteConversation(conversation._id);
+                        }}
+                      />
                     </a>
                   </SidebarMenuButton>
                 </SidebarMenuItem>

@@ -10,7 +10,7 @@ export async function GET(req: NextRequest) {
   // For simplicity, assume one active conversation per user.
   let conversation = await Conversation.findOne({ userId });
   if (!conversation) {
-    conversation = await Conversation.create({ userId, title: "Chat" });
+    conversation = await Conversation.create({ userId, title: "New Chat" });
   }
   return NextResponse.json(conversation);
 }

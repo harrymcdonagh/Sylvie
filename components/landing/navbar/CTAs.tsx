@@ -12,8 +12,6 @@ const CTAs = () => {
     router.push("/");
   };
 
-  console.log("Session data:", session);
-
   return (
     <div className="flex items-center gap-3">
       {session?.user ? (

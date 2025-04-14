@@ -33,37 +33,37 @@ export const Chat = () => {
     if (!content.trim() || !activeConversation) return;
 
     const userMessage: Message = {
-      _id: Date.now().toString(),
+      _id: Date.now().toString(), //ui id
       content,
       sender: "user",
       timestamp: new Date().toISOString(),
       status: "sent",
     };
-
+    //@ts-ignore
     setMessages((prev) => [...prev, userMessage]);
 
+    const { _id, ...uMessage } = userMessage;
     await fetch("/api/messages", {
       method: "POST",
-      body: JSON.stringify({ ...userMessage, conversationId: activeConversation }),
+      body: JSON.stringify({ ...uMessage, conversationId: activeConversation }),
     });
 
     setIsTyping(true);
 
     setTimeout(async () => {
       const assistantMessage: Message = {
-        id: (Date.now() + 1).toString(),
+        _id: (Date.now() + 1).toString(), //ui id
         content: `I'm responding to your message: "${content}"`,
         sender: "assistant",
         timestamp: new Date().toISOString(),
         status: "sent",
       };
-
+      //@ts-ignore
       setMessages((prev) => [...prev, assistantMessage]);
-
-      // Save assistant message with conversationId.
+      const { _id, ...aMessage } = assistantMessage;
       await fetch("/api/messages", {
         method: "POST",
-        body: JSON.stringify({ ...assistantMessage, conversationId: activeConversation }),
+        body: JSON.stringify({ ...aMessage, conversationId: activeConversation }),
       });
 
       setIsTyping(false);

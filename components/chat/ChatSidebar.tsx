@@ -51,6 +51,31 @@ export function ChatSidebar() {
     fetchConversations();
   }, [session, activeConversation, setActiveConversation]);
 
+  const handleNewChat = async () => {
+    if (!session?.user?.id) return;
+
+    try {
+      const res = await fetch(`/api/conversations/new`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: session.user.id }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to create new conversation");
+      }
+
+      const newConversation = await res.json();
+
+      // Prepend the new conversation to the conversations list
+      setConversations((prev) => [newConversation, ...prev]);
+      // Set the newly created conversation as active.
+      setActiveConversation(newConversation._id);
+    } catch (error) {
+      console.error("Error creating new chat:", error);
+    }
+  };
+
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const today = new Date();
@@ -89,6 +114,7 @@ export function ChatSidebar() {
           <Button
             className="w-full gap-2 bg-orange-500 hover:bg-orange-600 text-white"
             size="sm"
+            onClick={() => handleNewChat()}
           >
             <Plus size={16} />
             <span>New Chat</span>

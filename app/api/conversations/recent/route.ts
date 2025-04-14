@@ -10,7 +10,6 @@ export async function GET(req: NextRequest) {
   }
 
   const conversations = await Conversation.find({ userId }).sort({ createdAt: -1 });
-  console.log("Conversations:", conversations);
 
   return NextResponse.json(conversations);
 }

@@ -1,11 +1,13 @@
 "use client";
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
-import type { Message } from "@/lib/types";
+import type { Message, Conversation } from "@/lib/types";
 
 interface ChatContextType {
   activeConversation: string;
   setActiveConversation: (id: string) => void;
+  activeConversationData: Conversation | null;
+  setActiveConversationData: (conv: Conversation | null) => void;
   messages: Message[];
   setMessages: (msgs: Message[]) => void;
   refreshMessages: () => void;
@@ -15,6 +17,8 @@ const ChatContext = createContext<ChatContextType | undefined>(undefined);
 
 export const ChatProvider = ({ children }: { children: ReactNode }) => {
   const [activeConversation, setActiveConversation] = useState<string>("");
+  const [activeConversationData, setActiveConversationData] =
+    useState<Conversation | null>(null);
   const [messages, setMessages] = useState<Message[]>([]);
 
   const refreshMessages = async () => {
@@ -32,6 +36,7 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
+  // When the active conversation changes, fetch its messages.
   useEffect(() => {
     refreshMessages();
   }, [activeConversation]);
@@ -41,6 +46,8 @@ export const ChatProvider = ({ children }: { children: ReactNode }) => {
       value={{
         activeConversation,
         setActiveConversation,
+        activeConversationData,
+        setActiveConversationData,
         messages,
         setMessages,
         refreshMessages,

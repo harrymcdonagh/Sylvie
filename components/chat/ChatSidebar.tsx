@@ -24,7 +24,8 @@ import type { Conversation } from "@/lib/types";
 
 export function ChatSidebar() {
   const { data: session } = useSession();
-  const { activeConversation, setActiveConversation } = useChatContext();
+  const { activeConversation, setActiveConversation, setActiveConversationData } =
+    useChatContext();
   const [conversations, setConversations] = useState<Conversation[]>([]);
 
   useEffect(() => {
@@ -42,6 +43,7 @@ export function ChatSidebar() {
         // If no active conversation is set, choose the first one.
         if (data.length > 0 && !activeConversation) {
           setActiveConversation(data[0]._id);
+          setActiveConversationData(data[0]);
         }
       } catch (error) {
         console.error("Error fetching conversations:", error);
@@ -49,54 +51,7 @@ export function ChatSidebar() {
     };
 
     fetchConversations();
-  }, [session, activeConversation, setActiveConversation]);
-
-  const handleNewChat = async () => {
-    if (!session?.user?.id) return;
-
-    try {
-      const res = await fetch(`/api/conversations/new`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId: session.user.id }),
-      });
-
-      if (!res.ok) {
-        throw new Error("Failed to create new conversation");
-      }
-
-      const newConversation = await res.json();
-
-      setConversations((prev) => [newConversation, ...prev]);
-      setActiveConversation(newConversation._id);
-    } catch (error) {
-      console.error("Error creating new chat:", error);
-    }
-  };
-
-  const handleDeleteConversation = async (conversationId: string) => {
-    if (!session?.user?.id) return;
-    console.log("Deleting conversation:", conversationId);
-
-    try {
-      const res = await fetch(
-        `/api/conversations/remove?conversationId=${conversationId}`,
-        {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ userId: session.user.id }),
-        }
-      );
-
-      if (!res.ok) {
-        throw new Error("Failed to delete conversation");
-      }
-
-      setConversations((prev) => prev.filter((conv) => conv._id !== conversationId));
-    } catch (error) {
-      console.error("Error deleting chat:", error);
-    }
-  };
+  }, [session, activeConversation, setActiveConversation, setActiveConversationData]);
 
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
@@ -114,6 +69,54 @@ export function ChatSidebar() {
         day: "numeric",
         year: "numeric",
       });
+    }
+  };
+
+  const handleNewChat = async () => {
+    if (!session?.user?.id) return;
+
+    try {
+      const res = await fetch(`/api/conversations/new`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: session.user.id }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to create new conversation");
+      }
+
+      const newConversation = await res.json();
+      setConversations((prev) => [newConversation, ...prev]);
+      setActiveConversation(newConversation._id);
+      setActiveConversationData(newConversation);
+    } catch (error) {
+      console.error("Error creating new chat:", error);
+    }
+  };
+
+  const handleDeleteConversation = async (conversationId: string) => {
+    try {
+      const res = await fetch(
+        `/api/conversations/remove?conversationId=${conversationId}`,
+        { method: "DELETE" }
+      );
+      if (!res.ok) {
+        throw new Error("Failed to delete conversation");
+      }
+      setConversations((prev) => prev.filter((conv) => conv._id !== conversationId));
+      if (activeConversation === conversationId) {
+        if (conversations.length > 1) {
+          const remaining = conversations.filter((conv) => conv._id !== conversationId);
+          setActiveConversation(remaining[0]?._id || "");
+          setActiveConversationData(remaining[0] || null);
+        } else {
+          setActiveConversation("");
+          setActiveConversationData(null);
+        }
+      }
+    } catch (error) {
+      console.error("Error deleting conversation:", error);
     }
   };
 
@@ -136,7 +139,7 @@ export function ChatSidebar() {
           <Button
             className="w-full gap-2 bg-orange-500 hover:bg-orange-600 text-white"
             size="sm"
-            onClick={() => handleNewChat()}
+            onClick={handleNewChat}
           >
             <Plus size={16} />
             <span>New Chat</span>
@@ -157,9 +160,12 @@ export function ChatSidebar() {
                   <SidebarMenuButton
                     asChild
                     isActive={activeConversation === conversation._id}
-                    onClick={() => setActiveConversation(conversation._id)}
+                    onClick={() => {
+                      setActiveConversation(conversation._id);
+                      setActiveConversationData(conversation);
+                    }}
                   >
-                    <a href="#" className="flex items-center justify-between w-full">
+                    <div className="flex items-center justify-between w-full">
                       <div className="flex items-center gap-2">
                         <MessageSquare size={16} />
                         <div className="flex flex-col">
@@ -178,7 +184,7 @@ export function ChatSidebar() {
                           handleDeleteConversation(conversation._id);
                         }}
                       />
-                    </a>
+                    </div>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}

@@ -126,7 +126,9 @@ export function ChatSidebar() {
         <div className="flex items-center justify-between px-4 py-3">
           <div className="flex items-center gap-2">
             <div className="relative">
-              <Cat className="text-orange-400 w-10 h-10" />
+              <Link href="/">
+                <Cat className="text-orange-400 w-10 h-10" />
+              </Link>
             </div>
             <div>
               <h1 className="text-2xl font-bold tracking-tight">Sylvie</h1>

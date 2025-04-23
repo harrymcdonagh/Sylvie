@@ -45,15 +45,25 @@ export const Chat = () => {
     const { _id, ...uMessage } = userMessage;
     await fetch("/api/messages", {
       method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ ...uMessage, conversationId: activeConversation }),
     });
 
     setIsTyping(true);
 
-    setTimeout(async () => {
+    try {
+      // Send the user message to your API route which talks to Ollama.
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: content }),
+      });
+      const data = await response.json();
+
+      // Create an assistant message using the reply from Ollama.
       const assistantMessage: Message = {
         _id: (Date.now() + 1).toString(), //ui id
-        content: `I'm responding to your message: "${content}"`,
+        content: data.reply, // reply returned from llama
         sender: "assistant",
         timestamp: new Date().toISOString(),
         status: "sent",
@@ -63,11 +73,24 @@ export const Chat = () => {
       const { _id, ...aMessage } = assistantMessage;
       await fetch("/api/messages", {
         method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...aMessage, conversationId: activeConversation }),
       });
-
+    } catch (error) {
+      console.error("Error fetching bot response:", error);
+      // In case of any errors, append an error message.
+      const errorMessage: Message = {
+        _id: (Date.now() + 1).toString(),
+        content: "Oops, something went wrong.",
+        sender: "assistant",
+        timestamp: new Date().toISOString(),
+        status: "sent",
+      };
+      //@ts-ignore
+      setMessages((prev) => [...prev, errorMessage]);
+    } finally {
       setIsTyping(false);
-    }, 1500);
+    }
   };
 
   return (

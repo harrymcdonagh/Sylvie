@@ -1,0 +1,15 @@
+.message-bubble {
+  position: relative;
+}
+.message-bubble .timestamp {
+  position: absolute;
+  bottom: -1.25rem;
+  right: 0;
+  font-size: 0.625rem;
+  color: theme("colors.muted-foreground");
+  opacity: 0;
+  transition: opacity 150ms;
+}
+.message-bubble:hover .timestamp {
+  opacity: 1;
+}

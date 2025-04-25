@@ -1,3 +1,6 @@
+"use client";
+
+import { motion } from "framer-motion";
 import type { Message, User } from "@/lib/types";
 import { Cat } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -12,16 +15,20 @@ const MessageBubble = ({ message, user }: MessageBubbleProps) => {
   const avatarFallback = user.name?.charAt(0).toUpperCase();
 
   return (
-    <div className={`flex ${isUserMessage ? "justify-end" : "justify-start"} mb-2`}>
+    <motion.div
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.2 }}
+      className={`flex ${isUserMessage ? "justify-end" : "justify-start"} mb-2`}
+    >
       {!isUserMessage && (
         <div className="w-8 h-8 rounded-full bg-background flex items-center justify-center mr-2 self-end">
           <Cat className="text-orange-400 w-8 h-8" />
         </div>
       )}
-
       <div className="flex flex-col max-w-[80%]">
         <div
-          className={`p-3 rounded-lg ${
+          className={`p-4 rounded-lg leading-relaxed ${
             isUserMessage
               ? "bg-primary text-primary-foreground rounded-br-none"
               : "bg-primary text-primary-foreground rounded-bl-none border border-border"
@@ -40,7 +47,7 @@ const MessageBubble = ({ message, user }: MessageBubbleProps) => {
           </Avatar>
         </div>
       )}
-    </div>
+    </motion.div>
   );
 };
 

@@ -94,7 +94,7 @@ export const Chat = () => {
   };
 
   return (
-    <div className="flex flex-col h-full w-[80%] rounded-xl shadow-lg overflow-hidden border bg-background text-foreground">
+    <div className="flex flex-col h-full flex-1 max-w-3xl mx-auto rounded-xl shadow-lg overflow-hidden border text-foreground">
       <ChatTitle />
       <ChatWindow
         messages={messages}

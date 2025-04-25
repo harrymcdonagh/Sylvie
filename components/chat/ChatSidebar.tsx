@@ -15,15 +15,26 @@ import {
   SidebarSeparator,
 } from "@/components/ui/sidebar";
 import { Button } from "@/components/ui/button";
-import { LogOut, MessageSquare, Plus, Settings, User, Cat, Trash } from "lucide-react";
+import {
+  LogOut,
+  MessageSquare,
+  Plus,
+  Settings,
+  User,
+  Cat,
+  Trash,
+  ChevronDown,
+} from "lucide-react";
 import { ModeToggle } from "../ui/mode-toggle";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useChatContext } from "./ChatProvider";
 import type { Conversation } from "@/lib/types";
+import { Input } from "../ui/input";
 
 export function ChatSidebar() {
   const { data: session } = useSession();
+  const [collapsed, setCollapsed] = useState(false);
   const { activeConversation, setActiveConversation, setActiveConversationData } =
     useChatContext();
   const [conversations, setConversations] = useState<Conversation[]>([]);
@@ -148,53 +159,98 @@ export function ChatSidebar() {
           </Button>
         </div>
       </SidebarHeader>
-
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel className="flex justify-between">
-            <span>Recent Conversations</span>
-            <span className="text-xs text-muted-foreground">{conversations.length}</span>
+          <SidebarGroupLabel
+            onClick={() => setCollapsed(!collapsed)}
+            className="
+      flex items-center justify-between
+      px-4 py-2
+      text-sm font-medium text-gray-700 dark:text-gray-300
+      hover:bg-gray-100 dark:hover:bg-neutral-800
+      rounded-md
+      cursor-pointer select-none
+      transition-colors
+      my-2
+    "
+          >
+            <div className="flex items-center gap-2">
+              <span>Recent Conversations</span>
+              <ChevronDown
+                className={`
+          w-4 h-4 transform transition-transform duration-200
+          ${collapsed ? "rotate-180" : ""}
+        `}
+              />
+            </div>
+            <span className="text-xs text-gray-500 dark:text-gray-400">
+              {conversations.length}
+            </span>
           </SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {conversations.map((conversation) => (
-                <SidebarMenuItem key={conversation._id}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={activeConversation === conversation._id}
-                    onClick={() => {
-                      setActiveConversation(conversation._id);
-                      setActiveConversationData(conversation);
-                    }}
-                  >
-                    <div className="flex items-center justify-between w-full">
-                      <div className="flex items-center gap-2">
-                        <MessageSquare size={16} />
-                        <div className="flex flex-col">
-                          <span>{conversation.title}</span>
-                          <span className="text-xs text-muted-foreground">
-                            {formatDate(conversation.createdAt)}
-                          </span>
-                        </div>
-                      </div>
-                      <Trash
-                        size={16}
-                        className="cursor-pointer hover:text-red-500"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          e.stopPropagation();
-                          handleDeleteConversation(conversation._id);
+          {!collapsed && (
+            <SidebarGroupContent>
+              <SidebarMenu className="flex flex-col space-y-1 px-2">
+                {conversations.map((conv) => {
+                  const isActive = activeConversation === conv._id;
+                  return (
+                    <SidebarMenuItem key={conv._id}>
+                      <SidebarMenuButton
+                        asChild
+                        isActive={isActive}
+                        onClick={() => {
+                          setActiveConversation(conv._id);
+                          setActiveConversationData(conv);
                         }}
-                      />
-                    </div>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
+                        className={`
+                        w-full
+                        px-4
+                        py-5          
+                        rounded-md
+                        cursor-pointer
+                        transition-colors duration-150
+                        ${
+                          isActive
+                            ? "bg-orange-500 text-white"
+                            : "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-neutral-800"
+                        }
+                      `}
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-4">
+                            <MessageSquare
+                              size={16}
+                              className="text-gray-500 dark:text-gray-400"
+                            />
+                            <div className="flex flex-col">
+                              <span
+                                className={isActive ? "font-semibold" : "font-normal"}
+                              >
+                                {conv.title}
+                              </span>
+                              <span className="text-xs text-gray-500 dark:text-gray-400">
+                                {formatDate(conv.createdAt)}
+                              </span>
+                            </div>
+                          </div>
+                          <Trash
+                            size={16}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              handleDeleteConversation(conv._id);
+                            }}
+                            className="text-gray-400 hover:text-red-500"
+                          />
+                        </div>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  );
+                })}
+              </SidebarMenu>
+            </SidebarGroupContent>
+          )}
         </SidebarGroup>
       </SidebarContent>
-
       <SidebarFooter>
         <SidebarSeparator />
         <SidebarGroup>

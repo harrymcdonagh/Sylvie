@@ -33,7 +33,7 @@ const ChatInput = ({ onSendMessage }: ChatInputProps) => {
         <Button
           type="submit"
           size="icon"
-          className="rounded-full bg-orange-500 text-white"
+          className="rounded-full bg-orange-500 hover:bg-orange-600 focus:ring-2 focus:ring-offset-2 focus:ring-orange-400 text-white"
           disabled={!message.trim()}
         >
           <Send className="h-5 w-5" />

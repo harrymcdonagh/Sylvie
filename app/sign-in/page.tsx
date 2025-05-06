@@ -79,7 +79,7 @@ const SignIn = () => {
         <CardHeader>
           <CardTitle className="text-center text-2xl">Sign In</CardTitle>
           <CardDescription className="text-sm text-center text-muted-foreground">
-            Use email or services to sign in
+            Use email to sign in
           </CardDescription>
         </CardHeader>
 
@@ -112,31 +112,6 @@ const SignIn = () => {
               Continue
             </Button>
           </form>
-
-          <div className="flex items-center gap-4">
-            <Separator className="flex-1" />
-            <span className="text-xs text-muted-foreground">or</span>
-            <Separator className="flex-1" />
-          </div>
-
-          <div className="flex justify-center gap-4">
-            <Button
-              disabled={pending}
-              onClick={(e) => handleProvider(e, "google")}
-              variant="outline"
-              size="lg"
-            >
-              <FcGoogle className="text-xl" />
-            </Button>
-            <Button
-              disabled={pending}
-              onClick={(e) => handleProvider(e, "github")}
-              variant="outline"
-              size="lg"
-            >
-              <FaGithub className="text-xl" />
-            </Button>
-          </div>
 
           <p className="text-center text-sm mt-2 text-muted-foreground">
             Don’t have an account?

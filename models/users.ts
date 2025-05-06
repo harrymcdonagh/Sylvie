@@ -39,11 +39,11 @@ const UserSchema: Schema<IUser> = new Schema({
   },
   course: {
     type: String,
-    required: false,
+    default: "Not specified",
   },
   year: {
     type: String,
-    required: false,
+    default: "Not specified",
   },
 });
 const User: Model<IUser> =

@@ -1,4 +1,3 @@
-// app/profile/page.tsx
 "use client";
 
 import { useSession, signIn } from "next-auth/react";
@@ -9,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { UserCircle } from "lucide-react";
 import FlyoutNav from "@/components/landing/navbar/FlyoutNav";
 
-type ApiUser = { name?: string; email?: string; image?: string };
+type ApiUser = { name?: string; email?: string; image?: string; createdAt?: Date };
 
 export default function ProfilePage() {
   const { data: session, status } = useSession();
@@ -29,7 +28,12 @@ export default function ProfilePage() {
           return res.json();
         })
         .then((data) => {
-          setApiUser({ name: data.name, email: data.email, image: data.image });
+          setApiUser({
+            name: data.name,
+            email: data.email,
+            image: data.image,
+            createdAt: data.createdAt,
+          });
           setFormData({
             name: data.name || "",
             email: data.email || "",
@@ -57,7 +61,6 @@ export default function ProfilePage() {
   return (
     <>
       <FlyoutNav />
-
       <div className="relative h-screen bg-[url('/bg.jpg')] bg-cover bg-center">
         <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/70 to-black/50" />
         <div className="relative z-10 flex min-h-full flex-col items-center justify-center text-center px-4">
@@ -69,6 +72,7 @@ export default function ProfilePage() {
               name: apiUser?.name,
               email: apiUser?.email,
               image: apiUser?.image,
+              createdAt: apiUser?.createdAt?.toISOString(),
             }}
             formData={formData}
             setFormData={setFormData}

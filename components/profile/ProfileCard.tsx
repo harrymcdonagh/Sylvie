@@ -1,8 +1,8 @@
-// components/profile/ProfileCard.tsx
 "use client";
 
 import { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
+import { signOut, useSession } from "next-auth/react";
 import {
   Card,
   CardContent,
@@ -22,6 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Trash } from "lucide-react";
 
 type FormValues = {
   name: string;
@@ -35,6 +36,9 @@ type ProfileCardProps = {
     name?: string;
     email?: string;
     image?: string;
+    course?: string;
+    year?: string;
+    createdAt?: string;
   };
   formData: FormValues;
   setFormData: React.Dispatch<React.SetStateAction<FormValues>>;
@@ -42,6 +46,7 @@ type ProfileCardProps = {
 
 export default function ProfileCard({ user, formData, setFormData }: ProfileCardProps) {
   const [isEditing, setIsEditing] = useState(false);
+  const { data: session } = useSession();
 
   const {
     register,
@@ -57,10 +62,51 @@ export default function ProfileCard({ user, formData, setFormData }: ProfileCard
     reset(formData);
   }, [formData, reset]);
 
-  const onSubmit = (data: FormValues) => {
-    console.log("Saving profile data:", data);
-    setFormData(data);
-    setIsEditing(false);
+  const onSubmit = async (data: FormValues) => {
+    try {
+      const res = await fetch("/api/user", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          userId: session?.user.id,
+          ...data,
+        }),
+      });
+
+      if (!res.ok) throw new Error("Failed to update profile");
+
+      const updatedUser = await res.json();
+      console.log("Updated user:", updatedUser);
+
+      setFormData(data);
+      setIsEditing(false);
+      alert("Profile updated successfully!");
+    } catch (error) {
+      console.error("Error updating profile:", error);
+      alert("Error updating profile.");
+    }
+  };
+
+  const handleDelete = async () => {
+    if (
+      confirm(
+        "Are you sure you want to delete your account? This action cannot be undone."
+      )
+    ) {
+      try {
+        const res = await fetch(`/api/user?userId=${session?.user.id}`, {
+          method: "DELETE",
+        });
+
+        if (!res.ok) throw new Error("Failed to delete account");
+
+        alert("Account deleted successfully. You will be logged out.");
+        signOut();
+      } catch (error) {
+        console.error("Error deleting account:", error);
+        alert("Error deleting account.");
+      }
+    }
   };
 
   const getInitials = (name?: string) => {
@@ -83,7 +129,17 @@ export default function ProfileCard({ user, formData, setFormData }: ProfileCard
           </AvatarFallback>
         </Avatar>
         <div className="text-center sm:text-left">
-          <CardTitle className="text-2xl">{user.name || "Welcome"}</CardTitle>
+          <CardTitle>{user.name}</CardTitle>
+          {user.createdAt && (
+            <CardDescription>
+              Member since{" "}
+              {new Date(user.createdAt).toLocaleDateString("en-GB", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              })}
+            </CardDescription>
+          )}
         </div>
       </CardHeader>
 
@@ -182,7 +238,7 @@ export default function ProfileCard({ user, formData, setFormData }: ProfileCard
           </div>
 
           {isEditing && (
-            <div className="mt-6 flex justify-end space-x-2">
+            <div className="mt-6 flex justify-between">
               <Button
                 type="button"
                 variant="outline"
@@ -193,9 +249,14 @@ export default function ProfileCard({ user, formData, setFormData }: ProfileCard
               >
                 Cancel
               </Button>
-              <Button type="submit" disabled={!isDirty}>
-                Save Changes
-              </Button>
+              <div className="flex space-x-2">
+                <Button type="submit" disabled={!isDirty}>
+                  Save Changes
+                </Button>
+                <Button type="button" variant="destructive" onClick={handleDelete}>
+                  <Trash className="mr-2 h-4 w-4" /> Delete Account
+                </Button>
+              </div>
             </div>
           )}
         </form>
@@ -203,6 +264,11 @@ export default function ProfileCard({ user, formData, setFormData }: ProfileCard
 
       <CardFooter className="flex justify-between">
         {!isEditing && <Button onClick={() => setIsEditing(true)}>Edit Profile</Button>}
+        {!isEditing && (
+          <Button type="button" variant="destructive" onClick={handleDelete}>
+            <Trash className="mr-2 h-4 w-4" /> Delete Account
+          </Button>
+        )}
       </CardFooter>
     </Card>
   );

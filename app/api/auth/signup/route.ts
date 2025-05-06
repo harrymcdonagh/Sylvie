@@ -38,12 +38,12 @@ export async function POST(req: Request) {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
-    const newUser = await User.create({
+    await User.create({
       name,
       email,
       password: hashedPassword,
     });
-    await newUser.save();
+
     return NextResponse.json({ message: "User created successfully" }, { status: 201 });
   } catch {
     return NextResponse.json({ message: "Internal server error" }, { status: 500 });

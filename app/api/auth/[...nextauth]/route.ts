@@ -10,10 +10,6 @@ const handler = NextAuth({
     strategy: "jwt",
   },
   providers: [
-    Github({
-      clientId: process.env.GITHUB_ID as string,
-      clientSecret: process.env.GITHUB_SECRET as string,
-    }),
     CredentialsProvider({
       name: "Credentials",
       credentials: {

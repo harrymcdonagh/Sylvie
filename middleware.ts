@@ -6,4 +6,4 @@ export default withAuth(function middleware(req) {}, {
   },
 });
 
-export const config = { matcher: ["/chat/:path*"] };
+export const config = { matcher: ["/chat/:path*", "/profile/:path*"] };

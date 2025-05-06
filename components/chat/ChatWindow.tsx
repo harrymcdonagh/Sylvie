@@ -5,7 +5,7 @@ import React, { Fragment } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import type { Message, User } from "@/lib/types";
 import MessageBubble from "./MessageBubble";
-import { Loader2, Cat } from "lucide-react";
+import { Cat } from "lucide-react";
 
 interface ChatWindowProps {
   messages: Message[];

@@ -1,6 +1,5 @@
 "use client";
-import AboutHero from "./AboutHero";
-import Mission from "./mission";
+import Mission from "./Mission";
 import AboutFeatures from "./AboutFeatures";
 
 const AboutContent = () => (

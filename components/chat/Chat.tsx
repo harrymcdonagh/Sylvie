@@ -52,7 +52,6 @@ export const Chat = () => {
     setIsTyping(true);
 
     try {
-      // Send the user message to your API route which talks to Ollama.
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -60,7 +59,6 @@ export const Chat = () => {
       });
       const data = await response.json();
 
-      // Create an assistant message using the reply from Ollama.
       const assistantMessage: Message = {
         _id: (Date.now() + 1).toString(), //ui id
         content: data.reply, // reply returned from llama
@@ -78,7 +76,6 @@ export const Chat = () => {
       });
     } catch (error) {
       console.error("Error fetching bot response:", error);
-      // In case of any errors, append an error message.
       const errorMessage: Message = {
         _id: (Date.now() + 1).toString(),
         content: "Oops, something went wrong.",
@@ -93,8 +90,16 @@ export const Chat = () => {
     }
   };
 
+  if (!activeConversation) {
+    return (
+      <div className="flex-1 flex items-center justify-center p-4 text-gray-500">
+        Start a conversation now
+      </div>
+    );
+  }
+
   return (
-    <div className="flex flex-col h-full flex-1 max-w-3xl mx-auto rounded-xl shadow-lg overflow-hidden border text-foreground">
+    <div className="flex flex-col h-full flex-1 max-w-5xl mx-auto rounded-xl shadow-lg overflow-hidden border text-foreground">
       <ChatTitle />
       <ChatWindow
         messages={messages}

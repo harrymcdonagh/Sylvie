@@ -28,7 +28,7 @@ const MessageBubble = ({ message, user }: MessageBubbleProps) => {
       )}
       <div className="flex flex-col max-w-[80%]">
         <div
-          className={`p-4 rounded-lg leading-relaxed ${
+          className={`p-4 rounded-lg leading-relaxed whitespace-pre-line ${
             isUserMessage
               ? "bg-primary text-primary-foreground rounded-br-none"
               : "bg-primary text-primary-foreground rounded-bl-none border border-border"

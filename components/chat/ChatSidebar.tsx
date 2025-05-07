@@ -30,8 +30,8 @@ import Link from "next/link";
 import { useChatContext } from "./ChatProvider";
 import type { Conversation } from "@/lib/types";
 import { useUser } from "@/hooks/useUser";
-import BarLoader from "../ui/BarLoader";
 import { formatDate } from "@/utils/dateUtils";
+import ChatSidebarSkeleton from "../skeletons/ChatSidebarSkeleton";
 
 export function ChatSidebar() {
   const { user, loading, error } = useUser();
@@ -64,7 +64,7 @@ export function ChatSidebar() {
   }, [user?.id, activeConversation, setActiveConversation, setActiveConversationData]);
 
   if (loading) {
-    return <BarLoader />;
+    return <ChatSidebarSkeleton />;
   }
 
   if (error) {

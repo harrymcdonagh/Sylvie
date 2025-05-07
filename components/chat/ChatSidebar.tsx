@@ -26,32 +26,31 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { ModeToggle } from "../ui/mode-toggle";
-import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useChatContext } from "./ChatProvider";
 import type { Conversation } from "@/lib/types";
-import { Input } from "../ui/input";
+import { useUser } from "@/hooks/useUser";
+import BarLoader from "../ui/BarLoader";
+import { formatDate } from "@/utils/dateUtils";
 
 export function ChatSidebar() {
-  const { data: session } = useSession();
+  const { user, loading, error } = useUser();
   const [collapsed, setCollapsed] = useState(false);
   const { activeConversation, setActiveConversation, setActiveConversationData } =
     useChatContext();
   const [conversations, setConversations] = useState<Conversation[]>([]);
 
   useEffect(() => {
-    if (!session?.user?.id) return;
-
+    if (!user?.id) return;
     const fetchConversations = async () => {
       try {
-        const res = await fetch(`/api/conversations/recent?userId=${session.user.id}`);
+        const res = await fetch(`/api/conversations/recent?userId=${user.id}`);
         if (!res.ok) {
           throw new Error("Failed to load conversations");
         }
         const data = await res.json();
         setConversations(data);
 
-        // If no active conversation is set, choose the first one.
         if (data.length > 0 && !activeConversation) {
           setActiveConversation(data[0]._id);
           setActiveConversationData(data[0]);
@@ -62,35 +61,28 @@ export function ChatSidebar() {
     };
 
     fetchConversations();
-  }, [session, activeConversation, setActiveConversation, setActiveConversationData]);
+  }, [user?.id, activeConversation, setActiveConversation, setActiveConversationData]);
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    const today = new Date();
-    const yesterday = new Date(today);
-    yesterday.setDate(yesterday.getDate() - 1);
+  if (loading) {
+    return <BarLoader />;
+  }
 
-    if (date.toDateString() === today.toDateString()) {
-      return "Today";
-    } else if (date.toDateString() === yesterday.toDateString()) {
-      return "Yesterday";
-    } else {
-      return date.toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-      });
-    }
-  };
+  if (error) {
+    return (
+      <Sidebar>
+        <SidebarContent className="p-4 text-red-500">
+          <p>Failed to load account.</p>
+        </SidebarContent>
+      </Sidebar>
+    );
+  }
 
   const handleNewChat = async () => {
-    if (!session?.user?.id) return;
-
     try {
       const res = await fetch(`/api/conversations/new`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId: session.user.id }),
+        body: JSON.stringify({ userId: user?.id }),
       });
 
       if (!res.ok) {
@@ -150,7 +142,7 @@ export function ChatSidebar() {
         </div>
         <div className="px-3 pt-2">
           <Button
-            className="w-full gap-2 bg-orange-500 hover:bg-orange-600 text-white"
+            className="w-full gap-2 bg-orange-500 hover:bg-orange-600 text-white cursor-pointer"
             size="sm"
             onClick={handleNewChat}
           >
@@ -254,7 +246,7 @@ export function ChatSidebar() {
       <SidebarFooter>
         <SidebarSeparator />
         <SidebarGroup>
-          <SidebarGroupLabel>{session?.user?.name}</SidebarGroupLabel>
+          <SidebarGroupLabel>{user?.name}</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               <SidebarMenuItem>

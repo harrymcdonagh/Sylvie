@@ -7,12 +7,22 @@ import ProfileCard from "@/components/profile/ProfileCard";
 import { Button } from "@/components/ui/button";
 import { UserCircle } from "lucide-react";
 import FlyoutNav from "@/components/landing/navbar/FlyoutNav";
-
-type ApiUser = { name?: string; email?: string; image?: string; createdAt?: string };
+import { useUser } from "@/hooks/useUser";
 
 export default function ProfilePage() {
-  const { data: session, status } = useSession();
-  const [apiUser, setApiUser] = useState<ApiUser | null>(null);
+  const { status: authStatus } = useSession();
+  const { user, loading, error } = useUser();
+
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] p-6">
+        <UserCircle className="h-24 w-24 text-muted-foreground mb-4" />
+        <h1 className="text-2xl font-bold mb-4">Profile</h1>
+        <p className="text-red-500 mb-6">{error}</p>
+      </div>
+    );
+  }
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -21,33 +31,21 @@ export default function ProfilePage() {
   });
 
   useEffect(() => {
-    if (status === "authenticated" && session?.user.id) {
-      fetch(`/api/user?userId=${session.user.id}`)
-        .then((res) => {
-          if (!res.ok) throw new Error("Error fetching user data");
-          return res.json();
-        })
-        .then((data) => {
-          setApiUser({
-            name: data.name,
-            email: data.email,
-            image: data.image,
-            createdAt: data.createdAt,
-          });
-          setFormData({
-            name: data.name || "",
-            email: data.email || "",
-            course: data.course || "",
-            year: data.year || "",
-          });
-        })
-        .catch(() => setApiUser(null));
+    if (user) {
+      setFormData({
+        name: user.name || "",
+        email: user.email || "",
+        course: (user as any).course || "",
+        year: (user as any).year || "",
+      });
     }
-  }, [status, session?.user.id]);
+  }, [user]);
 
-  if (status === "loading") return <BarLoader />;
+  if (authStatus === "loading" || loading) {
+    return <BarLoader />;
+  }
 
-  if (status === "unauthenticated") {
+  if (authStatus === "unauthenticated" || error) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] p-6">
         <UserCircle className="h-24 w-24 text-muted-foreground mb-4" />
@@ -69,10 +67,10 @@ export default function ProfilePage() {
           </h1>
           <ProfileCard
             user={{
-              name: apiUser?.name,
-              email: apiUser?.email,
-              image: apiUser?.image,
-              createdAt: apiUser?.createdAt,
+              name: user?.name,
+              email: user?.email,
+              image: user?.image,
+              createdAt: user?.createdAt,
             }}
             formData={formData}
             setFormData={setFormData}

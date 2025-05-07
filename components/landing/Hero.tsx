@@ -33,7 +33,7 @@ const Hero = () => {
           </Reveal>
           <Reveal>
             <Link href="/chat">
-              <OutlineButton className="pointer-events-auto before:bg-orange-700 hover:text-white hover:border-orange-700 bg-orange-500 text-zinc-100 border-orange-500 md:mt-3">
+              <OutlineButton className="pointer-events-auto before:bg-orange-700 hover:text-white hover:border-orange-700 bg-orange-500 text-zinc-100 border-orange-500 md:mt-3 cursor-pointer">
                 Let&apos;s Chat
               </OutlineButton>
             </Link>

@@ -89,8 +89,6 @@ export default function ProfileCard({ user, formData, setFormData }: ProfileCard
 
       if (!res.ok) throw new Error("Failed to update profile");
 
-      const updatedUser = await res.json();
-
       setFormData(data);
       setIsEditing(false);
       alert("Profile updated successfully!");

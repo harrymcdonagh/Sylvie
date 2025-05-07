@@ -5,8 +5,9 @@ import ChatTitle from "./ChatTitle";
 import ChatWindow from "./ChatWindow";
 import ChatInput from "./ChatInput";
 import type { Message, User } from "@/lib/types";
-import { useSession } from "next-auth/react";
 import { useChatContext } from "./ChatProvider";
+import { useUser } from "@/hooks/useUser";
+import BarLoader from "../ui/BarLoader";
 
 const assistant: User = {
   id: "assistant",
@@ -14,20 +15,32 @@ const assistant: User = {
 };
 
 export const Chat = () => {
-  const { data: session } = useSession();
   const { activeConversation, messages, setMessages } = useChatContext();
   const [isTyping, setIsTyping] = useState(false);
+  const { user, loading, error } = useUser();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const currentUser: User = {
-    id: session?.user.id || "",
-    name: session?.user.name || "User",
-    avatar: session?.user.image || "",
+    id: user?.id || "",
+    name: user?.name || "User",
+    avatar: user?.image || "",
   };
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isTyping]);
+
+  if (error) {
+    return (
+      <div className="flex-1 flex items-center justify-center p-4 text-gray-500">
+        {error}
+      </div>
+    );
+  }
+
+  if (loading) {
+    return <BarLoader />;
+  }
 
   const sendMessage = async (content: string) => {
     if (!content.trim() || !activeConversation) return;

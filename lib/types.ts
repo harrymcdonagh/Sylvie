@@ -1,7 +1,11 @@
 export interface User {
   id: string;
   name: string;
+  email?: string;
   avatar?: string;
+  course?: string;
+  year?: string;
+  createdAt?: string;
 }
 
 export interface Message {

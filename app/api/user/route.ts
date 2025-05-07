@@ -20,13 +20,13 @@ export async function GET(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
   await connectDb();
-  const { userId, name, email, course, year } = await req.json();
+  const { userId, name, email, course, year, image } = await req.json();
   if (!userId) {
     return NextResponse.json({ error: "Missing userId" }, { status: 400 });
   }
   const updatedUser = await User.findByIdAndUpdate(
     userId,
-    { name, email, course, year },
+    { name, email, course, year, image },
     { new: true }
   );
 

@@ -1,5 +1,7 @@
 "use client";
 
+import type React from "react";
+
 import { useState, useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { signOut, useSession } from "next-auth/react";
@@ -22,7 +24,16 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Trash } from "lucide-react";
+import { Trash, Pencil } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { useRouter } from "next/navigation";
 
 type FormValues = {
   name: string;
@@ -45,8 +56,11 @@ type ProfileCardProps = {
 };
 
 export default function ProfileCard({ user, formData, setFormData }: ProfileCardProps) {
+  const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
   const { data: session } = useSession();
+  const [isAvatarDialogOpen, setIsAvatarDialogOpen] = useState(false);
+  const [imageUrl, setImageUrl] = useState(user.image || "");
 
   const {
     register,
@@ -76,11 +90,11 @@ export default function ProfileCard({ user, formData, setFormData }: ProfileCard
       if (!res.ok) throw new Error("Failed to update profile");
 
       const updatedUser = await res.json();
-      console.log("Updated user:", updatedUser);
 
       setFormData(data);
       setIsEditing(false);
       alert("Profile updated successfully!");
+      router.refresh();
     } catch (error) {
       console.error("Error updating profile:", error);
       alert("Error updating profile.");
@@ -122,12 +136,22 @@ export default function ProfileCard({ user, formData, setFormData }: ProfileCard
   return (
     <Card className="w-full max-w-2xl mx-auto">
       <CardHeader className="flex flex-col sm:flex-row items-center gap-4">
-        <Avatar className="h-24 w-24">
-          <AvatarImage src={user.image || undefined} alt={user.name || "User"} />
-          <AvatarFallback className="text-3xl bg-primary text-primary-foreground">
-            {getInitials(user.name)}
-          </AvatarFallback>
-        </Avatar>
+        <div className="relative">
+          <Avatar className="h-24 w-24">
+            <AvatarImage src={user.image || undefined} alt={user.name || "User"} />
+            <AvatarFallback className="text-3xl bg-primary text-primary-foreground">
+              {getInitials(user.name)}
+            </AvatarFallback>
+          </Avatar>
+          <button
+            type="button"
+            onClick={() => setIsAvatarDialogOpen(true)}
+            className="absolute top-0 right-0 bg-primary text-primary-foreground rounded-full p-1.5 shadow-md hover:bg-primary/90 transition-colors"
+            aria-label="Update profile picture"
+          >
+            <Pencil className="h-4 w-4" />
+          </button>
+        </div>
         <div className="text-center sm:text-left">
           <CardTitle>{user.name}</CardTitle>
           {user.createdAt && (
@@ -270,6 +294,88 @@ export default function ProfileCard({ user, formData, setFormData }: ProfileCard
           </Button>
         )}
       </CardFooter>
+      <Dialog open={isAvatarDialogOpen} onOpenChange={setIsAvatarDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Update profile picture</DialogTitle>
+            <DialogDescription>
+              Enter the URL of your new profile picture.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="flex items-center space-x-4 py-4">
+            <div className="flex-shrink-0">
+              <Avatar className="h-16 w-16">
+                <AvatarImage src={imageUrl || undefined} alt={user.name || "User"} />
+                <AvatarFallback className="text-xl bg-primary text-primary-foreground">
+                  {getInitials(user.name)}
+                </AvatarFallback>
+              </Avatar>
+            </div>
+            <div className="flex-1">
+              <Input
+                value={imageUrl}
+                onChange={(e) => setImageUrl(e.target.value)}
+                placeholder={user.image}
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => {
+                setImageUrl(user.image || "");
+                setIsAvatarDialogOpen(false);
+              }}
+            >
+              Cancel
+            </Button>
+            <Button
+              type="button"
+              onClick={async () => {
+                try {
+                  const res = await fetch("/api/user", {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                      userId: session?.user.id,
+                      image: imageUrl,
+                    }),
+                  });
+
+                  if (!res.ok) throw new Error("Failed to update profile picture");
+
+                  const updatedUser = await res.json();
+                  console.log("Updated user:", updatedUser);
+
+                  if (session?.user.id) {
+                    fetch(`/api/user?userId=${session.user.id}`)
+                      .then((res) => res.json())
+                      .then((data) => {
+                        setFormData({
+                          ...formData,
+                          name: data.name || formData.name,
+                          email: data.email || formData.email,
+                          course: data.course || formData.course,
+                          year: data.year || formData.year,
+                        });
+                      });
+                  }
+
+                  setIsAvatarDialogOpen(false);
+                  alert("Profile picture updated successfully!");
+                  router.refresh();
+                } catch (error) {
+                  console.error("Error updating profile picture:", error);
+                  alert("Error updating profile picture.");
+                }
+              }}
+            >
+              Update
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </Card>
   );
 }

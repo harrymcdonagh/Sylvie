@@ -3,22 +3,35 @@ import Link from "next/link";
 import { FaUserCircle } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 import UserDropdown from "./UserDropdown";
+import { useEffect, useState } from "react";
+
+type ApiUser = { image?: string; name?: string; email?: string };
 
 const CTAs = () => {
   const router = useRouter();
   const { data: session } = useSession();
+  const [apiUser, setApiUser] = useState<ApiUser>({});
   const handleSignOut = async () => {
     await signOut({ redirect: false });
     router.push("/");
   };
 
+  useEffect(() => {
+    if (session?.user.id) {
+      fetch(`/api/user?userId=${session.user.id}`)
+        .then((res) => res.json())
+        .then((u) => setApiUser(u))
+        .catch(console.error);
+    }
+  }, [session?.user.id]);
+
   return (
     <div className="flex items-center gap-3">
       {session?.user ? (
         <UserDropdown
-          name={session?.user?.name || "User"}
-          email={session.user.email || ""}
-          image={session.user.image || undefined}
+          name={apiUser.name || "User"}
+          email={apiUser.email || ""}
+          image={apiUser.image || undefined}
           onSignOut={handleSignOut}
         />
       ) : (

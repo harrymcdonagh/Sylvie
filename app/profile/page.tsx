@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { UserCircle } from "lucide-react";
 import FlyoutNav from "@/components/landing/navbar/FlyoutNav";
 
-type ApiUser = { name?: string; email?: string; image?: string; createdAt?: Date };
+type ApiUser = { name?: string; email?: string; image?: string; createdAt?: string };
 
 export default function ProfilePage() {
   const { data: session, status } = useSession();
@@ -72,7 +72,7 @@ export default function ProfilePage() {
               name: apiUser?.name,
               email: apiUser?.email,
               image: apiUser?.image,
-              createdAt: apiUser?.createdAt?.toISOString(),
+              createdAt: apiUser?.createdAt,
             }}
             formData={formData}
             setFormData={setFormData}

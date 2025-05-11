@@ -68,13 +68,13 @@ export const Chat = () => {
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: content }),
+        body: JSON.stringify({ message: content, userId: user?.id }),
       });
       const data = await response.json();
 
       const assistantMessage: Message = {
         _id: (Date.now() + 1).toString(), //ui id
-        content: data.reply, // reply returned from llama
+        content: data.reply, // reply returned from model
         sender: "assistant",
         timestamp: new Date().toISOString(),
         status: "sent",

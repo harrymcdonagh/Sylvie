@@ -1,5 +1,4 @@
 "use client";
-
 import { useRef, useEffect, useState } from "react";
 import ChatTitle from "./ChatTitle";
 import ChatWindow from "./ChatWindow";
@@ -15,7 +14,8 @@ const assistant: User = {
 };
 
 export const Chat = () => {
-  const { activeConversation, messages, setMessages } = useChatContext();
+  const { activeConversation, messages, setMessages, setActiveConversationData } =
+    useChatContext();
   const [isTyping, setIsTyping] = useState(false);
   const { user, loading, error } = useUser();
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -92,6 +92,16 @@ export const Chat = () => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...aMessage, conversationId: activeConversation }),
       });
+
+      try {
+        const res = await fetch(`/api/conversations/${activeConversation}`);
+        if (res.ok) {
+          const updatedConversation = await res.json();
+          setActiveConversationData({ ...updatedConversation });
+        }
+      } catch (err) {
+        console.error("Failed to refresh conversation title", err);
+      }
     } catch (error) {
       console.error("Error fetching bot response:", error);
       const errorMessage: Message = {

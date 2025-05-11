@@ -215,7 +215,9 @@ export function ChatSidebar() {
                             />
                             <div className="flex flex-col">
                               <span
-                                className={isActive ? "font-semibold" : "font-normal"}
+                                className={`${
+                                  isActive ? "font-semibold" : "font-normal"
+                                } inline-block max-w-[120px] whitespace-nowrap overflow-hidden text-ellipsis`}
                               >
                                 {conv.title}
                               </span>

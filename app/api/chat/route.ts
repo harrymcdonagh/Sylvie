@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import connectDb from "@/lib/mongodb";
 import Message from "@/models/message";
 import User from "@/models/users";
+import Conversation from "@/models/conversation";
 
 export async function POST(request: NextRequest) {
   const { message, userId, conversationId } = await request.json();
@@ -44,7 +45,13 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "LLM service failed" }, { status: 502 });
     }
 
-    const { reply } = await res.json();
+    const conversation = await Conversation.findById(conversationId);
+    const { reply, title } = await res.json();
+
+    if (conversation?.title === "New Chat") {
+      await Conversation.findByIdAndUpdate(conversationId, { title });
+    }
+
     return NextResponse.json({ reply });
   } catch (e) {
     console.error("Chat proxy error:", e);

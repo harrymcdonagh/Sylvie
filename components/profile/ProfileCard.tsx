@@ -131,6 +131,17 @@ export default function ProfileCard({ user, formData, setFormData }: ProfileCard
       .substring(0, 2);
   };
 
+  const yearOptions = [
+    { val: "1", label: "First Year" },
+    { val: "2", label: "Second Year" },
+    { val: "3", label: "Third Year" },
+    { val: "4", label: "Fourth Year" },
+    { val: "5+", label: "Fifth Year or Above" },
+    { val: "Postgraduate", label: "Postgraduate" },
+  ];
+
+  const mappedYear = yearOptions.find((y) => y.val === user.year)?.label;
+
   return (
     <Card className="w-full max-w-2xl mx-auto">
       <CardHeader className="flex flex-col sm:flex-row items-center gap-4">
@@ -203,7 +214,13 @@ export default function ProfileCard({ user, formData, setFormData }: ProfileCard
                       onValueChange={field.onChange}
                     >
                       <SelectTrigger disabled={!isEditing}>
-                        <SelectValue placeholder="Select your course" />
+                        <SelectValue
+                          placeholder={
+                            user.course === "Not specified"
+                              ? "Select your course"
+                              : user.course
+                          }
+                        />
                       </SelectTrigger>
                       <SelectContent>
                         {[
@@ -236,17 +253,16 @@ export default function ProfileCard({ user, formData, setFormData }: ProfileCard
                       onValueChange={field.onChange}
                     >
                       <SelectTrigger disabled={!isEditing}>
-                        <SelectValue placeholder="Select your year" />
+                        <SelectValue
+                          placeholder={
+                            user.year === "Not specified"
+                              ? "Select your year"
+                              : mappedYear
+                          }
+                        />
                       </SelectTrigger>
                       <SelectContent>
-                        {[
-                          { val: "1", label: "First Year" },
-                          { val: "2", label: "Second Year" },
-                          { val: "3", label: "Third Year" },
-                          { val: "4", label: "Fourth Year" },
-                          { val: "5+", label: "Fifth Year or Above" },
-                          { val: "Postgraduate", label: "Postgraduate" },
-                        ].map(({ val, label }) => (
+                        {yearOptions.map(({ val, label }) => (
                           <SelectItem key={val} value={val}>
                             {label}
                           </SelectItem>

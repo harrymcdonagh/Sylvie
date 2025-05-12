@@ -7,6 +7,8 @@ interface ApiUser {
   email: string;
   image: string;
   createdAt: string;
+  course: string;
+  year: string;
 }
 
 export function useUser() {
@@ -34,6 +36,8 @@ export function useUser() {
             email: data.email,
             image: data.image,
             createdAt: data.createdAt,
+            course: data.course,
+            year: data.year,
           });
         })
         .catch((err: Error) => {

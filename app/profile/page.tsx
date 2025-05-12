@@ -35,8 +35,8 @@ export default function ProfilePage() {
       setFormData({
         name: user.name || "",
         email: user.email || "",
-        course: (user as any).course || "",
-        year: (user as any).year || "",
+        course: user.course || "",
+        year: user.year || "",
       });
     }
   }, [user]);
@@ -71,6 +71,8 @@ export default function ProfilePage() {
               email: user?.email,
               image: user?.image,
               createdAt: user?.createdAt,
+              course: user?.course,
+              year: user?.year,
             }}
             formData={formData}
             setFormData={setFormData}

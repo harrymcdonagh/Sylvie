@@ -27,14 +27,14 @@ export async function POST(request: NextRequest) {
         content: m.content,
       }));
 
-    console.log("History sent to FastAPI:", JSON.stringify(history, null, 2));
-
     const res = await fetch("http://localhost:8000/api/generate", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         prompt: message,
         student_name: user.name,
+        course: user.course,
+        year: user.year,
         history,
       }),
     });

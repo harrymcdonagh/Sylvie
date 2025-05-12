@@ -18,7 +18,7 @@ export const Chat = () => {
     useChatContext();
   const [isTyping, setIsTyping] = useState(false);
   const { user, loading, error } = useUser();
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   const currentUser: User = {
     id: user?.id || "",
@@ -97,7 +97,7 @@ export const Chat = () => {
         const res = await fetch(`/api/conversations/${activeConversation}`);
         if (res.ok) {
           const updatedConversation = await res.json();
-          setActiveConversationData({ ...updatedConversation });
+          setActiveConversationData(updatedConversation);
         }
       } catch (err) {
         console.error("Failed to refresh conversation title", err);
@@ -134,9 +134,9 @@ export const Chat = () => {
         currentUser={currentUser}
         assistant={assistant}
         isTyping={isTyping}
+        bottomRef={messagesEndRef}
       />
       <ChatInput onSendMessage={sendMessage} />
-      <div ref={messagesEndRef} />
     </div>
   );
 };

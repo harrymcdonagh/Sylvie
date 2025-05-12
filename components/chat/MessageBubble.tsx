@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import type { Message, User } from "@/lib/types";
 import { Cat } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import ReactMarkdown from "react-markdown";
 
 interface MessageBubbleProps {
   message: Message;
@@ -13,6 +14,14 @@ interface MessageBubbleProps {
 const MessageBubble = ({ message, user }: MessageBubbleProps) => {
   const isUserMessage = message.sender === "user";
   const avatarFallback = user.name?.charAt(0).toUpperCase();
+
+  const normalizeMarkdown = (text: string) => {
+    return text
+      .replace(/(\d\.\s[^\n]+)\n\n(?=\d\.)/g, "$1\n") // remove blank lines between numbered list items
+      .replace(/\n{3,}/g, "\n\n") // no more than 2 line breaks
+      .trim();
+  };
+  const cleanedContent = normalizeMarkdown(message.content);
 
   return (
     <motion.div
@@ -34,7 +43,28 @@ const MessageBubble = ({ message, user }: MessageBubbleProps) => {
               : "bg-primary text-primary-foreground rounded-bl-none border border-border"
           }`}
         >
-          {message.content}
+          <ReactMarkdown
+            components={{
+              p: ({ children }) => <p className="my-1">{children}</p>,
+              strong: ({ children }) => (
+                <strong className="font-semibold">{children}</strong>
+              ),
+              a: ({ node, ...props }) => (
+                <a
+                  {...props}
+                  className="text-blue-600 underline hover:text-blue-800 dark:text-blue-400"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                />
+              ),
+              ul: ({ children }) => (
+                <ul className="list-disc pl-5 space-y-1">{children}</ul>
+              ),
+              li: ({ children }) => <li>{children}</li>,
+            }}
+          >
+            {cleanedContent}
+          </ReactMarkdown>
         </div>
       </div>
       {isUserMessage && (

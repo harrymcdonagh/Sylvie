@@ -7,7 +7,6 @@ import type { Message, User } from "@/lib/types";
 import { useChatContext } from "./ChatProvider";
 import { useUser } from "@/hooks/useUser";
 import BarLoader from "../ui/BarLoader";
-import { set } from "mongoose";
 
 const assistant: User = {
   id: "assistant",
@@ -30,37 +29,6 @@ export const Chat = () => {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isTyping]);
-
-  useEffect(() => {
-    if (messages.length === 0 && activeConversation) {
-      const welcomeMessage: Message = {
-        _id: Date.now().toString(),
-        content: "Hello! I'm Sylvie, your UEA assistant. How can I help you today?",
-        sender: "assistant",
-        timestamp: new Date().toISOString(),
-        status: "sent",
-      };
-
-      //@ts-ignore
-      setMessages((prev) => [...prev, welcomeMessage]);
-
-      // Post the welcome message to the database
-      const postWelcomeMessage = async () => {
-        const { _id, ...messageData } = welcomeMessage;
-        try {
-          await fetch("/api/messages", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ ...messageData, conversationId: activeConversation }),
-          });
-        } catch (error) {
-          console.error("Failed to save the welcome message:", error);
-        }
-      };
-
-      postWelcomeMessage();
-    }
-  }, [messages, activeConversation]);
 
   if (error) {
     return (

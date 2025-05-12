@@ -36,8 +36,12 @@ import ChatSidebarSkeleton from "../skeletons/ChatSidebarSkeleton";
 export function ChatSidebar() {
   const { user, loading, error } = useUser();
   const [collapsed, setCollapsed] = useState(false);
-  const { activeConversation, setActiveConversation, setActiveConversationData } =
-    useChatContext();
+  const {
+    activeConversation,
+    setActiveConversation,
+    setActiveConversationData,
+    setMessages,
+  } = useChatContext();
   const [conversations, setConversations] = useState<Conversation[]>([]);
 
   useEffect(() => {
@@ -93,6 +97,28 @@ export function ChatSidebar() {
       setConversations((prev) => [newConversation, ...prev]);
       setActiveConversation(newConversation._id);
       setActiveConversationData(newConversation);
+
+      const now = new Date().toISOString();
+      const welcomeMessage = {
+        _id: Date.now().toString(),
+        content: "Hello! I’m Sylvie, your UEA assistant. How can I help you today?",
+        sender: "assistant" as const,
+        timestamp: now,
+        status: "sent" as const,
+      };
+      setMessages([welcomeMessage]);
+
+      await fetch("/api/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          content: welcomeMessage.content,
+          sender: welcomeMessage.sender,
+          timestamp: welcomeMessage.timestamp,
+          conversationId: newConversation._id,
+          status: welcomeMessage.status,
+        }),
+      });
     } catch (error) {
       console.error("Error creating new chat:", error);
     }

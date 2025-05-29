@@ -1,0 +1,150 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/136.0.0.0 Safari/537.36" version="27.0.6">
+  <diagram name="Page-1" id="-fctGmsfEYDj0M1U4ZxF">
+    <mxGraphModel dx="1749" dy="1306" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="cyV9spyrKLzt6nkNBgD0-4" value="&lt;div&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;&lt;br&gt;&lt;/font&gt;&lt;/div&gt;&lt;font style=&quot;font-size: 14px;&quot;&gt;MongoDB&lt;/font&gt;&lt;div&gt;&lt;font&gt;(Collections: users, messages, conversations)&lt;/font&gt;&lt;br&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;/div&gt;" style="shape=cylinder;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="580" y="350" width="120" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="cyV9spyrKLzt6nkNBgD0-7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="cyV9spyrKLzt6nkNBgD0-6">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="190" y="285" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="cyV9spyrKLzt6nkNBgD0-6" value="User" style="sketch=0;outlineConnect=0;fontColor=#232F3E;gradientColor=none;fillColor=#232F3D;strokeColor=none;dashed=0;verticalLabelPosition=bottom;verticalAlign=top;align=center;html=1;fontSize=12;fontStyle=0;aspect=fixed;pointerEvents=1;shape=mxgraph.aws4.user;" vertex="1" parent="1">
+          <mxGeometry x="-20" y="250" width="70" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="cyV9spyrKLzt6nkNBgD0-9" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;startArrow=none;startFill=0;" edge="1" parent="1" source="cyV9spyrKLzt6nkNBgD0-8" target="cyV9spyrKLzt6nkNBgD0-10">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="340" y="285" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="cyV9spyrKLzt6nkNBgD0-13" value="Login/Register/Session" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="cyV9spyrKLzt6nkNBgD0-9">
+          <mxGeometry x="-0.14" y="2" relative="1" as="geometry">
+            <mxPoint x="7" y="-13" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="cyV9spyrKLzt6nkNBgD0-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;startArrow=classic;startFill=1;" edge="1" parent="1" source="cyV9spyrKLzt6nkNBgD0-8" target="cyV9spyrKLzt6nkNBgD0-18">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="240" y="360" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="240" y="340" />
+              <mxPoint x="240" y="340" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="cyV9spyrKLzt6nkNBgD0-54" value="Send user input/ display&lt;div&gt;response&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="cyV9spyrKLzt6nkNBgD0-15">
+          <mxGeometry x="-0.1143" y="-2" relative="1" as="geometry">
+            <mxPoint x="2" y="3" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="cyV9spyrKLzt6nkNBgD0-8" value="Chat UI" style="html=1;dashed=0;whiteSpace=wrap;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="190" y="260" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="cyV9spyrKLzt6nkNBgD0-57" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="cyV9spyrKLzt6nkNBgD0-10">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="640" y="350" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="640" y="285" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="cyV9spyrKLzt6nkNBgD0-58" value="User Queries&amp;nbsp;&lt;div&gt;&amp;amp; Details&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="cyV9spyrKLzt6nkNBgD0-57">
+          <mxGeometry x="-0.2824" y="-2" relative="1" as="geometry">
+            <mxPoint y="19" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="cyV9spyrKLzt6nkNBgD0-10" value="Auth.js" style="html=1;dashed=0;whiteSpace=wrap;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="430" y="260" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="cyV9spyrKLzt6nkNBgD0-29" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;startArrow=classic;startFill=1;" edge="1" parent="1" source="cyV9spyrKLzt6nkNBgD0-18" target="cyV9spyrKLzt6nkNBgD0-28">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cyV9spyrKLzt6nkNBgD0-62" value="Send input and response" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="cyV9spyrKLzt6nkNBgD0-29">
+          <mxGeometry x="-0.2" y="-3" relative="1" as="geometry">
+            <mxPoint x="3" y="5" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="cyV9spyrKLzt6nkNBgD0-52" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;startArrow=none;startFill=0;" edge="1" parent="1" source="cyV9spyrKLzt6nkNBgD0-18" target="cyV9spyrKLzt6nkNBgD0-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cyV9spyrKLzt6nkNBgD0-55" value="Store Inputs and Responses" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="cyV9spyrKLzt6nkNBgD0-52">
+          <mxGeometry x="-0.0581" y="1" relative="1" as="geometry">
+            <mxPoint y="16" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="cyV9spyrKLzt6nkNBgD0-18" value="Next.js API&lt;div&gt;Routes&lt;/div&gt;" style="html=1;dashed=0;whiteSpace=wrap;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="190" y="380" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="cyV9spyrKLzt6nkNBgD0-34" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="cyV9spyrKLzt6nkNBgD0-21" target="cyV9spyrKLzt6nkNBgD0-31">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cyV9spyrKLzt6nkNBgD0-64" value="Pass input + services" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="cyV9spyrKLzt6nkNBgD0-34">
+          <mxGeometry x="-0.0467" y="1" relative="1" as="geometry">
+            <mxPoint as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="cyV9spyrKLzt6nkNBgD0-21" value="Semantic Similarity Search&lt;div&gt;(kb_search.py)&lt;/div&gt;" style="html=1;dashed=0;whiteSpace=wrap;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="190" y="572.5" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="cyV9spyrKLzt6nkNBgD0-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;startArrow=classic;startFill=1;" edge="1" parent="1" source="cyV9spyrKLzt6nkNBgD0-23" target="cyV9spyrKLzt6nkNBgD0-21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cyV9spyrKLzt6nkNBgD0-41" value="Get Relevant&lt;div&gt;Services&lt;/div&gt;" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="cyV9spyrKLzt6nkNBgD0-25">
+          <mxGeometry x="-0.0444" y="-1" relative="1" as="geometry">
+            <mxPoint y="22" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="cyV9spyrKLzt6nkNBgD0-23" value="UEA Knowledge Base&lt;div&gt;(uea_services.json)&lt;/div&gt;" style="shape=cylinder;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;fillColor=#d5e8d4;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="-20" y="550" width="110" height="95" as="geometry" />
+        </mxCell>
+        <mxCell id="cyV9spyrKLzt6nkNBgD0-30" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="cyV9spyrKLzt6nkNBgD0-28" target="cyV9spyrKLzt6nkNBgD0-21">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="cyV9spyrKLzt6nkNBgD0-63" value="Pass inupt" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="cyV9spyrKLzt6nkNBgD0-30">
+          <mxGeometry x="-0.3412" y="-1" relative="1" as="geometry">
+            <mxPoint x="1" y="6" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="cyV9spyrKLzt6nkNBgD0-28" value="FastAPI Service&lt;div&gt;(main.py)&lt;/div&gt;" style="html=1;dashed=0;whiteSpace=wrap;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="190" y="480" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="cyV9spyrKLzt6nkNBgD0-46" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" source="cyV9spyrKLzt6nkNBgD0-31" target="cyV9spyrKLzt6nkNBgD0-38">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="150" y="701" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="cyV9spyrKLzt6nkNBgD0-61" value="Send prompt to model" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="cyV9spyrKLzt6nkNBgD0-46">
+          <mxGeometry x="-0.0816" y="1" relative="1" as="geometry">
+            <mxPoint y="8" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="cyV9spyrKLzt6nkNBgD0-31" value="&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;Build Prompt&lt;/span&gt;&lt;/div&gt;&lt;div&gt;&lt;span style=&quot;background-color: transparent; color: light-dark(rgb(0, 0, 0), rgb(255, 255, 255));&quot;&gt;(chatbot_api.py)&lt;/span&gt;&lt;/div&gt;" style="html=1;dashed=0;whiteSpace=wrap;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="190" y="676" width="100" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="cyV9spyrKLzt6nkNBgD0-49" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;" edge="1" parent="1" target="cyV9spyrKLzt6nkNBgD0-28">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="350" y="500" as="targetPoint" />
+            <mxPoint x="14" y="736" as="sourcePoint" />
+            <Array as="points">
+              <mxPoint x="14" y="773" />
+              <mxPoint x="15" y="773" />
+              <mxPoint x="15" y="810" />
+              <mxPoint x="350" y="810" />
+              <mxPoint x="350" y="505" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="cyV9spyrKLzt6nkNBgD0-50" value="Return Model Response" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" vertex="1" connectable="0" parent="cyV9spyrKLzt6nkNBgD0-49">
+          <mxGeometry x="-0.075" y="-1" relative="1" as="geometry">
+            <mxPoint x="-118" y="-11" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="cyV9spyrKLzt6nkNBgD0-38" value="OpenAI&lt;div&gt;API&lt;/div&gt;" style="shape=ellipse;html=1;dashed=0;whiteSpace=wrap;perimeter=ellipsePerimeter;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="-20" y="666" width="70" height="70" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

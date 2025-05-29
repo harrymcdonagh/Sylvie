@@ -1,3 +1,5 @@
+//api/conversations/new/route.ts
+
 import { NextRequest, NextResponse } from "next/server";
 import connectDb from "@/lib/mongodb";
 import Conversation from "@/models/conversation";

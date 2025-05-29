@@ -1,3 +1,5 @@
+//api/response/route.ts
+
 import { NextRequest, NextResponse } from "next/server";
 import connectDb from "@/lib/mongodb";
 import Message from "@/models/message";

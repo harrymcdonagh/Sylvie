@@ -65,7 +65,7 @@ export const Chat = () => {
     setIsTyping(true);
 
     try {
-      const response = await fetch("/api/chat", {
+      const response = await fetch("/api/response", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

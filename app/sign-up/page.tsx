@@ -71,7 +71,7 @@ const SignUp = () => {
         <CardHeader>
           <CardTitle className="text-center text-2xl">Sign Up</CardTitle>
           <CardDescription className="text-sm text-center text-muted-foreground">
-            Use email or services to create an account
+            Use email to create an account
           </CardDescription>
         </CardHeader>
         {!!error && (

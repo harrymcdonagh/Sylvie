@@ -3,7 +3,7 @@ import FeaturesContent from "./FeaturesContent";
 
 const LINKS = [
   { text: "About", href: "/about" },
-  { text: "Features", href: "/features", component: FeaturesContent },
+  { text: "Features", href: "/", component: FeaturesContent },
   { text: "Help", href: "/help" },
 ];
 

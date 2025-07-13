@@ -1,6 +1,6 @@
 # Sylvie (Frontend)
 
-Sylvie is a modern AI-powered student support chatbot, built to help UEA students access tailored, compassionate responses to questions about mental health, academic life, and university services. This repository contains the **frontend** of Sylvie, developed with [Next.js](https://nextjs.org) and React. For full functionality, it must be used in conjunction with the [`sylvie-backend`](https://github.com/your-org/sylvie-backend) service.
+Sylvie is a modern AI-powered student support chatbot, built to help UEA students access tailored, compassionate responses to questions about mental health, academic life, and university services. This repository contains the **frontend** of Sylvie, developed with [Next.js](https://nextjs.org) and React. For full functionality, it must be used in conjunction with the [`sylvie-backend`](https://github.com/harrymcdonagh/sylvie-backend) service.
 
 ## Features
 
